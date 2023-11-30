@@ -8,8 +8,6 @@ from BaseFunc import BaseFunc
 
 import os
 
-sns.set(style='dark')
-
 # Dataset
 datetime_cols = ["shipping_limit_date", "order_purchase_timestamp", "order_approved_at", "order_delivered_carrier_date", "order_delivered_customer_date", "order_estimated_delivery_date"]
 all_df = pd.read_csv("combined_dataset.csv")
@@ -29,7 +27,7 @@ with st.sidebar:
     with col1:
         st.write(' ')
     with col2:
-        st.image("logo.png"
+        st.image("https://raw.githubusercontent.com/zhavei/Data-Analyst-Project-Ecommerce-Public-Dataset/master/dashboard/logo.jpg"
                  , width=100)
     with col3:
         st.write(' ')
@@ -83,4 +81,38 @@ sns.lineplot(
 )
 ax.tick_params(axis="x", rotation=45)
 ax.tick_params(axis="y", labelsize=15)
+st.pyplot(fig)
+
+
+# Order Items
+st.subheader("Order Items")
+col1, col2 = st.columns(2)
+
+with col1:
+    total_items = sum_order_items_df["product_count"].sum()
+    st.markdown(f"Total Items: **{total_items}**")
+
+with col2:
+    avg_items = sum_order_items_df["product_count"].mean()
+    st.markdown(f"Average Items: **{avg_items}**")
+
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(45, 25))
+
+sns.barplot(x="product_count", y="product_category_name_english", data=sum_order_items_df.head(5), palette="viridis", ax=ax[0])
+ax[0].set_ylabel(None)
+ax[0].set_xlabel("Number of Sales", fontsize=80)
+ax[0].set_title("Most sold products", loc="center", fontsize=90)
+ax[0].tick_params(axis ='y', labelsize=55)
+ax[0].tick_params(axis ='x', labelsize=50)
+
+sns.barplot(x="product_count", y="product_category_name_english", data=sum_order_items_df.sort_values(by="product_count", ascending=True).head(5), palette="viridis", ax=ax[1])
+ax[1].set_ylabel(None)
+ax[1].set_xlabel("Number of Sales", fontsize=80)
+ax[1].invert_xaxis()
+ax[1].yaxis.set_label_position("right")
+ax[1].yaxis.tick_right()
+ax[1].set_title("Fewest products sold", loc="center", fontsize=90)
+ax[1].tick_params(axis='y', labelsize=55)
+ax[1].tick_params(axis='x', labelsize=50)
+
 st.pyplot(fig)
