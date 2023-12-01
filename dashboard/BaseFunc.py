@@ -28,9 +28,4 @@ class BaseFunc:
 
         return sum_order_items_df
     
-    def create_order_status(self):
-        #order status
-        order_status_df = self.data["order_status"].value_counts().sort_values(ascending=False)
-        most_common_status = order_status_df.idxmax()
-
-        return order_status_df, most_common_status
+    
