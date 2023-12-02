@@ -1,4 +1,5 @@
 # Data Analyst Project Ecommerce Public Dataset ✨
+![Data Analyst Project Ecommerce Public Dataset](dashboard.gif)
 
 ## View Dashboard
 [E-Commerce Data Dashboard Streamlit App](https://e-commerce-data-analyst.streamlit.app/)
@@ -11,9 +12,8 @@ pip install numpy pandas scipy matplotlib seaborn jupyter streamlit babel
 ```
 ## Installation
 1. Clone this repository to your local machine:
-```
-git clone [This Repository](https://github.com/zhavei/Data-Analyst-Project-Ecommerce-Public-Dataset.git)
-```
+```git clone``` [This Repository](https://github.com/zhavei/Data-Analyst-Project-Ecommerce-Public-Dataset.git)
+
 2. Go to the project directory
 ```
 cd dashboard
@@ -21,7 +21,7 @@ cd dashboard
 3. Install the required Python packages by running:
 ```
 pip install -r requirements.txt
-
+```
 ## Run steamlit app
 ```
 cd dashboard

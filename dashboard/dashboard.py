@@ -11,7 +11,7 @@ import os
 
 # Dataset
 datetime_cols = ["shipping_limit_date", "order_purchase_timestamp", "order_approved_at", "order_delivered_carrier_date", "order_delivered_customer_date", "order_estimated_delivery_date"]
-all_df = pd.read_csv("combined_dataset.csv")
+all_df = pd.read_csv("https://raw.githubusercontent.com/zhavei/Data-Analyst-Project-Ecommerce-Public-Dataset/master/dashboard/combined_dataset.csv")
 all_df.sort_values(by="order_approved_at", inplace=True)
 all_df.reset_index(inplace=True)
 
