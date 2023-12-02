@@ -2,7 +2,7 @@
 ![Data Analyst Project Ecommerce Public Dataset](dashboard.gif)
 
 ## View Dashboard
-[E-Commerce Data Dashboard Streamlit App](https://e-commerce-data-analyst.streamlit.app/)
+[E-Commerce Data Dashboard Streamlit App](https://data-analyst-project-ecommerce-public-dataset.streamlit.app)
 
 ## Setup environment
 ```
@@ -16,7 +16,7 @@ pip install numpy pandas scipy matplotlib seaborn jupyter streamlit babel
 
 2. Go to the project directory
 ```
-cd dashboard
+cd Data-Analyst-Project-Ecommerce-Public-Dataset
 ```
 3. Install the required Python packages by running:
 ```

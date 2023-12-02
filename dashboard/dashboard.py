@@ -70,7 +70,7 @@ with col1:
 
 with col2:
     total_revenue = daily_orders_df["revenue"].sum()
-    st.markdown(f"Total Revenue: **{total_revenue}**")
+    st.markdown(f"Total Revenue: **${total_revenue:,.2f}**")
 
 fig, ax = plt.subplots(figsize=(12, 6))
 sns.lineplot(
