@@ -157,7 +157,7 @@ sns.barplot(
     x="product_category_name_english",
     y="sum",
     data=order_revenue_df.sort_values(by="sum", ascending=False),
-    palette=colors,
+    palette='viridis',
     ax=ax
     )
 ax.set_title("Number of Categories by Revenues", loc="center", fontsize=30)
@@ -178,6 +178,61 @@ for p in ax.patches:
 # Menampilkan visualisasi pada Streamlit
 st.pyplot(fig)
     
+###################################################################################
+
+#dimanakah pesanan/kostomer terbanyak berdasarkan kota?
+def customer_city(df):
+    order_by_city = df[df['order_status'] == 'delivered'].groupby('customer_city')\
+                        .agg({'order_id':'count'})\
+                        .sort_values('order_id',ascending=False)\
+                        .reset_index()
+    return order_by_city  # top 5 customer by city
+
+def customer_state(df):
+    order_by_state = df[df['order_status'] == 'delivered'].groupby('customer_state')\
+                        .agg({'order_id':'count'})\
+                        .sort_values('order_id',ascending=False)\
+                        .reset_index()
+    return order_by_state  # top 5 customer by state
+
+order_by_city = customer_city(main_df)
+order_by_state = customer_state(main_df)
+
+# Visualisasi dengan Seaborn dan Streamlit----------------
+st.subheader('Top 5 Customer By City & State')
+col1, col2 = st.columns(2)
+
+with col1:
+    total_customer_city = order_by_city["order_id"].count()
+    st.markdown(f"Total Customer by City: **{total_customer_city}**")
+
+with col2:
+    total_customer_state = order_by_state["order_id"].mean()
+    st.markdown(f"Average Customer by State: **{total_customer_state}**")
+
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(35, 15))
+
+colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
+
+sns.barplot(x="order_id", y="customer_city", data=order_by_city.head(5), palette='viridis', ax=ax[0])
+ax[0].set_ylabel(None)
+ax[0].set_xlabel("Customer City", fontsize=30)
+ax[0].set_title("Top 5 Kostumer Berdasarkan Kota", loc="center", fontsize=50)
+ax[0].tick_params(axis='y', labelsize=35)
+ax[0].tick_params(axis='x', labelsize=30)
+
+sns.barplot(x="order_id", y="customer_state", data=order_by_state.head(5), palette='viridis', ax=ax[1])
+ax[1].set_ylabel(None)
+ax[1].set_xlabel("Customer State", fontsize=30)
+ax[1].invert_xaxis()
+ax[1].yaxis.set_label_position("right")
+ax[1].yaxis.tick_right()
+ax[1].set_title("Top 5 Kostumer Berdasarkan State", loc="center", fontsize=50)
+ax[1].tick_params(axis='y', labelsize=35)
+ax[1].tick_params(axis='x', labelsize=30)
+
+st.pyplot(fig)
+
 ###################################################################################
 
 # seller berdasarkan seller city dan mengagregasi berdasarkan total harga & orderan
@@ -201,7 +256,7 @@ sales_by_city = seller_city(main_df)
 sales_by_state = seller_state(main_df)
 
 # Seller By City & State (Top 5)
-st.subheader("Top 5 Best Sellers By City & State")
+st.subheader("Top 5 Best Sellers Performer By City & State")
 #--------------------------------------------------
 # Create tabs
 tabs = st.tabs(["By City", "By State"])
@@ -209,16 +264,16 @@ tabs = st.tabs(["By City", "By State"])
 # Tab 1: By City
 with tabs[0]:
     total_sellers_city = sales_by_city["total_sales"].sum()
-    st.markdown(f"Total Price: **${total_sellers_city:,.2f}**")
+    st.markdown(f"Total Revenue: **${total_sellers_city:,.2f}**")
 
     # Plot bar chart for sellers by city (Top 5)
     fig, ax = plt.subplots(figsize=(20, 10))
-    colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
+    colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
     sns.barplot(
         x="seller_city",
         y="total_sales",
         data=sales_by_city.sort_values(by="total_sales", ascending=False),
-        palette=colors,
+        palette='viridis',
         ax=ax
     )
     ax.set_title("Top 5 Performer Sellers by City", loc="center", fontsize=30)
@@ -240,7 +295,7 @@ with tabs[0]:
 # Tab 2: By State
 with tabs[1]:
     total_sellers_state = sales_by_state["total_sales"].sum()
-    st.markdown(f"Total Price: **${total_sellers_state:,.2f}**")
+    st.markdown(f"Total Revenue: **${total_sellers_state:,.2f}**")
 
     # Plot bar chart for sellers by state (Top 5)
     fig, ax = plt.subplots(figsize=(20, 10))
@@ -249,7 +304,7 @@ with tabs[1]:
         x="seller_state",
         y="total_sales",
         data=sales_by_state.sort_values(by="total_sales", ascending=False),
-        palette=colors,
+        palette='viridis',
         ax=ax
     )
     ax.set_title("Top 5 Performer Sellers by State", loc="center", fontsize=30)
@@ -270,24 +325,4 @@ with tabs[1]:
 
 #################################################################
 
-#dimanakah pesanan/kostomer terbanyak berdasarkan kota?
-order_by_city = combine_data[combine_data['order_status'] == 'delivered']
-order_by_city = order_by_city.groupby('customer_city').agg({'order_id':'count'}).sort_values('order_id',ascending=False).reset_index()
-order_by_city.head()
-
-# dimanakah pesanan/kostomer terbanyak berdasarkan state?
-order_by_state = combine_data[combine_data['order_status'] == 'delivered']
-order_by_state = order_by_state.groupby('customer_state').agg({'order_id':'count'}).sort_values('order_id',ascending=False).reset_index()
-order_by_state.head()
-
-#visual
-plt.figure(figsize=(10, 6))
-plt.barh(order_by_city['customer_city'][:10], order_by_city['order_id'][:10])
-plt.title('Distribusi Pesanan terbanyak berdasarkan kota')
-plt.ylabel('Kota Kostomer')
-plt.xlabel('Jumlah Pesanan')
-# Menambahkan garis grid
-plt.grid(axis='x', linestyle='--', alpha=0.7)
-plt.show()
-
-
+st.caption("Copyright © Syafe'ie 2023")
